@@ -1,0 +1,22 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    ".cache": true,
+    // Hide compiled JS files from Explorer view
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
+  },
+  // Tell VS Code to use the TypeScript version installed in the project
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.validate.enable": true,
+  // Allow VS Code ESLint plugin to use the flat config
+  "eslint.experimental.useFlatConfig": true,
+  "eslint.options": {
+    "cacheLocation": ".cache/",
+  },
+  // Enable ESLint auto-fix on save
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+}

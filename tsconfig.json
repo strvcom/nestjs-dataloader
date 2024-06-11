@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // Produce ES Modules for Node.js instead of CommonJS
+    "target": "ES2022",
+    "module": "NodeNext",
+
+    "incremental": true,
+    "noEmitOnError": false,
+    "tsBuildInfoFile": ".cache/tsconfig.tsbuildinfo",
+    // Use `tslib` for helper functions
+    "importHelpers": true,
+    "inlineSourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+
+    // `strict` Enables the following rules:
+    // - alwaysStrict
+    // - strictNullChecks
+    // - strictBindCallApply
+    // - strictFunctionTypes
+    // - strictPropertyInitialization
+    // - noImplicitAny
+    // - noImplicitThis
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@strv/nestjs-dataloader",
+  "description": "Nest.js decorator for injecting GraphQL Dataloader instances into your resolvers",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "dataloader": "^2.2.2",
+    "tslib": "^2.6.3"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.3.5",
+    "@nestjs/core": "^10.3.5",
+    "@nestjs/graphql": "^12.1.1"
+  },
+  "devDependencies": {
+    "@strv/eslint-config-node": "^4.0.0",
+    "@strv/eslint-config-typescript": "^5.0.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  }
+}
