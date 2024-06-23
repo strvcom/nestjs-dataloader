@@ -16,7 +16,7 @@ abstract class DataloaderFactory<ID, Value, CacheID = ID> {
    */
   create(context: ExecutionContext) {
     return new DataLoader<ID, Value | null, CacheID>(async ids =>
-      await this.#load(ids, context))
+      await this.#load(ids, context), this.options?.(context))
   }
 
   /**
@@ -55,6 +55,9 @@ abstract class DataloaderFactory<ID, Value, CacheID = ID> {
       return results[position] ?? this.onNotFound?.(id) ?? null
     })
   }
+
+  /** Options for the dataloader. */
+  abstract options?(context: ExecutionContext): DataLoader.Options<ID, Value, CacheID>
 
   /**
    * When an item of the specified ID is not found, use this method to specify if the resulting value should be `null`
