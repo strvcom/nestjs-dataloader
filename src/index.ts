@@ -1,2 +1,3 @@
-export { DataloaderInterceptor, Loader } from './Dataloader.interceptor.js'
+export { Loader } from './Loader.decorator.js'
 export { DataloaderFactory, LoaderFrom, Aggregated } from './DataloaderFactory.js'
+export { DataloaderModule } from './Dataloader.module.js'

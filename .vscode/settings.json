@@ -12,7 +12,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.validate.enable": true,
   // Allow VS Code ESLint plugin to use the flat config
-  "eslint.experimental.useFlatConfig": true,
+  "eslint.useFlatConfig": true,
   "eslint.options": {
     "cacheLocation": ".cache/",
   },
