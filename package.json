@@ -22,6 +22,6 @@
     "@strv/eslint-config-node": "^4.0.0",
     "@strv/eslint-config-typescript": "^5.0.0",
     "eslint": "^8.57.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   }
 }
