@@ -41,6 +41,15 @@ abstract class DataloaderFactory<ID, Value, CacheID = ID> {
     return [...map.entries()].map(([id, values]) => ({ id, values }))
   }
 
+  /** Options for the dataloader. */
+  options?(context: ExecutionContext): DataLoader.Options<ID, Value, CacheID>
+
+  /**
+   * When an item of the specified ID is not found, use this method to specify if the resulting value should be `null`
+   * or a specific instance of Error.
+   */
+  onNotFound?(id: ID): null | Error
+
   /**
    * Load the items, order them by the ID order and return them back
    * @private
@@ -55,15 +64,6 @@ abstract class DataloaderFactory<ID, Value, CacheID = ID> {
       return results[position] ?? this.onNotFound?.(id) ?? null
     })
   }
-
-  /** Options for the dataloader. */
-  abstract options?(context: ExecutionContext): DataLoader.Options<ID, Value, CacheID>
-
-  /**
-   * When an item of the specified ID is not found, use this method to specify if the resulting value should be `null`
-   * or a specific instance of Error.
-   */
-  abstract onNotFound?(id: ID): null | Error
 
   /**
    * Load the items with the specified IDs

@@ -42,6 +42,9 @@ compile/watch: force install
 lint: force install
 	eslint --cache --cache-location .cache/ .
 
+test: force compile
+	vitest
+
 clean: force
 	rm -rf .cache
 	git clean -Xf src

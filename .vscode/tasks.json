@@ -80,6 +80,62 @@
       }
     },
     {
+      "label": "make: test",
+      "detail": "Run the test suite",
+      "type": "process",
+      "command": "/usr/bin/make",
+      "args": [
+        "test"
+      ],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$tsc",
+        // Attributes the problem to the whole file. 🥺 Probably because line must be matched inside the first regex.
+        // {
+        //   "owner": "vitest",
+        //   "source": "vitest",
+        //   "fileLocation": [
+        //     "relative",
+        //     "${workspaceFolder}"
+        //   ],
+        //   "background": {
+        //     "activeOnStart": true,
+        //     "beginsPattern": "RERUN",
+        //     "endsPattern": "for file changes...$"
+        //   },
+        //   "applyTo": "allDocuments",
+        //   "severity": "error",
+        //   "pattern": [
+        //     {
+        //       "regexp": "(\\x1b\\[[0-9;]*m)?FAIL(\\x1b\\[[0-9;]*m)?  (.+?)( > )",
+        //       "file": 3,
+        //     },
+        //     {
+        //       "regexp": "(.+?): (.+)$",
+        //       "code": 1,
+        //       "message": 3,
+        //     },
+        //     {
+        //       "regexp": ":(\\d+):(\\d+)",
+        //       "line": 1,
+        //       "column": 2,
+        //     }
+        //   ]
+        // }
+      ],
+      "presentation": {
+        "clear": true,
+      },
+      "isBackground": true,
+      "icon": {
+        "id": "beaker",
+        "color": "terminal.ansiGreen"
+      },
+    },
+    {
       "label": "make: clean",
       "detail": "Remove compiled and generated files, but preserve installed dependencies",
       "type": "process",
