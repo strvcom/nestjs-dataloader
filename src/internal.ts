@@ -3,6 +3,10 @@ import { type ModuleRef } from '@nestjs/core'
 import { GqlExecutionContext, type GqlContextType } from '@nestjs/graphql'
 import type DataLoader from 'dataloader'
 import { type DataloaderFactory } from './Dataloader.factory.js'
+import { type LifetimeKeyFn } from './types.js'
+
+/** @private */
+const OPTIONS_TOKEN = Symbol('DataloaderModuleOptions')
 
 /**
  * DataloaderFactory constructor type
@@ -26,22 +30,23 @@ const store = new WeakMap<object, StoreItem>()
 
 /**
  * Given Nestjs execution context, obtain something that is scoped to the lifetime of the current request and does not
- * change (same instance).
+ * change during request processing (same instance).
  * @private
  */
-function ctxkey(context: ExecutionContext) {
+const lifetimeKey: LifetimeKeyFn = (context: ExecutionContext) => {
   const type = context.getType<GqlContextType>()
 
   switch (type) {
     case 'graphql': return GqlExecutionContext.create(context).getContext<{ req: object }>().req
     case 'http': return context.switchToHttp().getRequest<object>()
-    // Support for other request types can be added later, we just did not need them yet.
+    // Support for other context types can be added later, we just did not need them yet.
     default: throw new Error(`Unknown or unsupported context type: ${type}`)
   }
 }
 
 export {
+  OPTIONS_TOKEN,
   store,
   Factory,
-  ctxkey,
+  lifetimeKey,
 }

@@ -1,11 +1,16 @@
 import {
+  Inject,
   Injectable,
   type CallHandler,
   type ExecutionContext,
   type NestInterceptor,
 } from '@nestjs/common'
 import { ModuleRef } from '@nestjs/core'
-import { ctxkey, store } from './internal.js'
+import { lifetimeKey, OPTIONS_TOKEN, store } from './internal.js'
+import { type DataloaderOptions } from './Dataloader.module.js'
+
+/** @private */
+type Options = DataloaderOptions & Required<Pick<DataloaderOptions, 'lifetime'>>
 
 /**
  * Interceptor that keeps a weak reference to all requests in order for the `@Loader()` param decorator to manage
@@ -23,13 +28,18 @@ import { ctxkey, store } from './internal.js'
 class DataloaderInterceptor implements NestInterceptor<unknown, unknown> {
   /** The Nest.js module that imports this interceptor, usually the root module */
   readonly #moduleRef: ModuleRef
+  readonly #options: Options
 
-  constructor(moduleRef: ModuleRef) {
+  constructor(moduleRef: ModuleRef, @Inject(OPTIONS_TOKEN) options?: DataloaderOptions) {
     this.#moduleRef = moduleRef
+    this.#options = {
+      lifetime: lifetimeKey,
+      ...options,
+    }
   }
 
   intercept(context: ExecutionContext, next: CallHandler<unknown>) {
-    store.set(ctxkey(context), {
+    store.set(this.#options.lifetime(context), {
       moduleRef: this.#moduleRef,
       dataloaders: new Map(),
     })
