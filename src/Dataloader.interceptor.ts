@@ -1,3 +1,4 @@
+import * as assert from 'node:assert/strict'
 import {
   Inject,
   Injectable,
@@ -36,6 +37,9 @@ class DataloaderInterceptor implements NestInterceptor<unknown, unknown> {
       lifetime: lifetimeKey,
       ...options,
     }
+
+    assert.ok(this.#options.lifetime, '`lifetime` must be set')
+    assert.equal(typeof this.#options.lifetime, 'function', '`lifetime` must be a function')
   }
 
   intercept(context: ExecutionContext, next: CallHandler<unknown>) {

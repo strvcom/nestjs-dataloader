@@ -1,6 +1,7 @@
 import { createParamDecorator, type ExecutionContext } from '@nestjs/common'
 import { lifetimeKey, store, type Factory } from './internal.js'
 import { type LifetimeKeyFn } from './types.js'
+import { DataloaderException } from './DataloaderException.js'
 
 /**
  * Create a custom `Loader()` decorator that uses your own implementation of the `LifetimeKeyFn` function. This is
@@ -12,7 +13,7 @@ function createLoaderDecorator(lifetime: LifetimeKeyFn) {
     const item = store.get(lifetime(context))
 
     if (!item) {
-      throw new Error('DataLoaderInterceptor not registered in this Nest.js application')
+      throw new DataloaderException('DataloaderModule not available in this Nest.js application')
     }
 
     if (!item.dataloaders.has(Factory)) {

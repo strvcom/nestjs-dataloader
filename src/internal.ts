@@ -4,6 +4,7 @@ import { GqlExecutionContext, type GqlContextType } from '@nestjs/graphql'
 import type DataLoader from 'dataloader'
 import { type DataloaderFactory } from './Dataloader.factory.js'
 import { type LifetimeKeyFn } from './types.js'
+import { DataloaderException } from './DataloaderException.js'
 
 /** @private */
 const OPTIONS_TOKEN = Symbol('DataloaderModuleOptions')
@@ -40,7 +41,7 @@ const lifetimeKey: LifetimeKeyFn = (context: ExecutionContext) => {
     case 'graphql': return GqlExecutionContext.create(context).getContext<{ req: object }>().req
     case 'http': return context.switchToHttp().getRequest<object>()
     // Support for other context types can be added later, we just did not need them yet.
-    default: throw new Error(`Unknown or unsupported context type: ${type}`)
+    default: throw new DataloaderException(`Unknown or unsupported context type: ${type}`)
   }
 }
 
