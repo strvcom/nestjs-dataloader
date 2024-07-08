@@ -2,7 +2,7 @@ import { type ExecutionContext, type Type } from '@nestjs/common'
 import { type ModuleRef } from '@nestjs/core'
 import { GqlExecutionContext, type GqlContextType } from '@nestjs/graphql'
 import type DataLoader from 'dataloader'
-import { type DataloaderFactory } from './DataloaderFactory.js'
+import { type DataloaderFactory } from './Dataloader.factory.js'
 
 /**
  * DataloaderFactory constructor type
