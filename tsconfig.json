@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     // Produce ES Modules for Node.js instead of CommonJS
-    "target": "ES2022",
+    "target": "ES2023",
     "module": "NodeNext",
 
     "incremental": true,
