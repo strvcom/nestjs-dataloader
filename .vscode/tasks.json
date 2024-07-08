@@ -1,0 +1,104 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "make: compile",
+      "detail": "Compile the project (TypeScript)",
+      "type": "process",
+      "command": "/usr/bin/make",
+      "args": [
+        "compile"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "revealProblems": "onProblem",
+        "clear": true
+      },
+      "icon": {
+        "id": "files",
+        "color": "terminal.ansiGreen"
+      },
+      "problemMatcher": [
+        "$tsc"
+      ]
+    },
+    {
+      "label": "make: compile/watch",
+      "detail": "Start TypeScript compiler in watch mode",
+      "type": "process",
+      "command": "/usr/bin/make",
+      "args": [
+        "compile/watch"
+      ],
+      "problemMatcher": [
+        "$tsc-watch",
+      ],
+      "group": "build",
+      "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1,
+        "runOn": "folderOpen"
+      },
+      "presentation": {
+        "echo": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "reveal": "never",
+        "revealProblems": "never"
+      },
+      "icon": {
+        "id": "files",
+        "color": "terminal.ansiYellow"
+      }
+    },
+    {
+      "label": "make: lint",
+      "detail": "Lint the project",
+      "type": "process",
+      "command": "/usr/bin/make",
+      "args": [
+        "lint"
+      ],
+      "group": "test",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "clear": true,
+        "revealProblems": "onProblem"
+      },
+      "icon": {
+        "id": "eye",
+        "color": "terminal.ansiGreen"
+      }
+    },
+    {
+      "label": "make: clean",
+      "detail": "Remove compiled and generated files, but preserve installed dependencies",
+      "type": "process",
+      "command": "/usr/bin/make",
+      "args": [
+        "clean"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "showReuseMessage": false,
+        "clear": true,
+        "close": true
+      },
+      "icon": {
+        "id": "trash",
+        "color": "terminal.ansiRed"
+      }
+    }
+  ],
+}

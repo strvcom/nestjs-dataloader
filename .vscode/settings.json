@@ -7,6 +7,8 @@
       "when": "$(basename).ts"
     },
   },
+  // Disable auto-detection of tasks in favour of manually defined tasks
+  "task.autoDetect": "off",
   // Tell VS Code to use the TypeScript version installed in the project
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib",
