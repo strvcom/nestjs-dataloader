@@ -1,8 +1,8 @@
-import { DynamicModule, Module } from '@nestjs/common'
+import { DynamicModule, type FactoryProvider, Module } from '@nestjs/common'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { DataloaderInterceptor } from './Dataloader.interceptor.js'
 import { OPTIONS_TOKEN } from './internal.js'
-import { type DataloaderModuleOptions, type DataloaderOptions } from './types.js'
+import { type DataloaderOptions } from './types.js'
 
 @Module({
   providers: [
@@ -33,8 +33,11 @@ class DataloaderModule {
   }
 }
 
+/** Dataloader module options for async configuration */
+type DataloaderModuleOptions = Omit<FactoryProvider<DataloaderOptions>, 'provide'> & Pick<DynamicModule, 'imports'>
+
+
 export {
   DataloaderModule,
-  DataloaderOptions,
   DataloaderModuleOptions,
 }

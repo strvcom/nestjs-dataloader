@@ -1,4 +1,4 @@
-import { type DynamicModule, type ExecutionContext, type FactoryProvider } from '@nestjs/common'
+import { type ExecutionContext } from '@nestjs/common'
 
 /**
  * Given an execution context, extract a value out of it that is
@@ -22,11 +22,7 @@ interface DataloaderOptions {
   lifetime?: LifetimeKeyFn
 }
 
-/** Dataloader module options for async configuration */
-type DataloaderModuleOptions = Omit<FactoryProvider<DataloaderOptions>, 'provide'> & Pick<DynamicModule, 'imports'>
-
 export {
   LifetimeKeyFn,
   DataloaderOptions,
-  DataloaderModuleOptions,
 }

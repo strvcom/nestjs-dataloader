@@ -1,4 +1,4 @@
-/** Exception thrown by the Dataloader module. */
+/** Exception thrown by the `@strv/nestjs-dataloader` module. */
 class DataloaderException extends Error {
   constructor(message?: string, options?: ErrorOptions) {
     super(message, options)

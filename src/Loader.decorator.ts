@@ -27,7 +27,7 @@ function createLoaderDecorator(lifetime: LifetimeKeyFn) {
 }
 
 /**
- * Load a `Dataloader` factory into the decorated parameter
+ * Inject a `Dataloader` factory into the decorated parameter
  * The factory class must be an implementation of the `DataloaderFactory` abstract class.
  */
 const Loader = createLoaderDecorator(lifetimeKey)

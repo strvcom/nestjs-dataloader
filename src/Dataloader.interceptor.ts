@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common'
 import { ModuleRef } from '@nestjs/core'
 import { lifetimeKey, OPTIONS_TOKEN, store } from './internal.js'
-import { type DataloaderOptions } from './Dataloader.module.js'
+import { type DataloaderOptions } from './types.js'
 
 /** @private */
 type Options = DataloaderOptions & Required<Pick<DataloaderOptions, 'lifetime'>>
