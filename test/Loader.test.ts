@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import request from 'supertest'
 import Dataloader from 'dataloader'
 import { describe } from 'vitest'
