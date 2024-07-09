@@ -9,6 +9,7 @@ const globs = {
   js: '**/*.js',
   mjs: '**/*.mjs',
   ts: '**/*.ts',
+  testts: '**/*.test.ts',
   dts: '**/*.d.ts',
 }
 
@@ -47,6 +48,11 @@ const config = [
           'test/**',
         ],
       }],
+    } },
+  { files: [globs.testts],
+    rules: {
+      'id-length': 'off',
+      'max-classes-per-file': 'off',
     } },
 ]
 
