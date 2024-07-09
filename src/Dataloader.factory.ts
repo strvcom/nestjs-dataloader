@@ -45,12 +45,6 @@ abstract class DataloaderFactory<ID, Value, CacheID = ID> {
   options?(context: ExecutionContext): DataLoader.Options<ID, Value, CacheID>
 
   /**
-   * When an item of the specified ID is not found, use this method to specify if the resulting value should be `null`
-   * or a specific instance of Error.
-   */
-  onNotFound?(id: ID): null | Error
-
-  /**
    * Load the items, order them by the ID order and return them back
    * @private
    */
@@ -61,7 +55,7 @@ abstract class DataloaderFactory<ID, Value, CacheID = ID> {
     return ids.map(id => {
       // Note: if no results for a given id are found, position will be -1
       const position = locations.indexOf(id)
-      return results[position] ?? this.onNotFound?.(id) ?? null
+      return results[position] ?? null
     })
   }
 
