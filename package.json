@@ -1,7 +1,14 @@
 {
   "name": "@strv/nestjs-dataloader",
   "description": "Nest.js decorator for injecting GraphQL Dataloader instances into your resolvers",
+  "author": {
+    "name": "Robert Rossmann",
+    "email": "robert.rossmann@strv.com"
+  },
+  "repository": "github:strvcom/nestjs-dataloader",
+  "homepage": "https://github.com/strvcom/nestjs-dataloader",
   "version": "1.0.0",
+  "license": "MIT",
   "type": "module",
   "exports": {
     ".": "./src/index.js"
@@ -9,6 +16,19 @@
   "engines": {
     "node": ">=22"
   },
+  "scripts": {
+    "prepare": "touch node_modules && make"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nest",
+    "nestjs",
+    "dataloader",
+    "graphql",
+    "apollo"
+  ],
   "dependencies": {
     "dataloader": "^2.2.2",
     "tslib": "^2.6.3"
