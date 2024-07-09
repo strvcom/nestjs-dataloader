@@ -9,14 +9,23 @@ import DataLoader from 'dataloader'
  * - ability to use Nest.js dependency injection together with `DataLoader`
  * - ordering the results according to the order of the IDs as requested by `DataLoader`
  */
-abstract class DataloaderFactory<ID, Value, CacheID = ID> {
+abstract class DataloaderFactory<ID, Value, NotFoundValue = null, CacheID = ID> {
   /**
    * Create a new instance of this DataLoader for the current request
    * @private You should not call this method directly; instead, it should be called by the interceptor
    */
   create(context: ExecutionContext) {
-    return new DataLoader<ID, Value | null, CacheID>(async ids =>
+    return new DataLoader<ID, Value | NotFoundValue, CacheID>(async ids =>
       await this.#load(ids, context), this.options?.(context))
+  }
+
+  /**
+   * When an item of the specified ID is not found, use this method to specify if the resulting value should be `null`
+   * or a specific instance of Error.
+   */
+  onNotFound(id: ID): NotFoundValue {
+    void id
+    return null as NotFoundValue
   }
 
   /**
@@ -55,7 +64,7 @@ abstract class DataloaderFactory<ID, Value, CacheID = ID> {
     return ids.map(id => {
       // Note: if no results for a given id are found, position will be -1
       const position = locations.indexOf(id)
-      return results[position] ?? null
+      return results[position] ?? this.onNotFound(id)
     })
   }
 
