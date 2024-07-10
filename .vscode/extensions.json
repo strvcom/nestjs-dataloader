@@ -3,5 +3,6 @@
     "editorconfig.editorconfig",
     "dbaeumer.vscode-eslint",
     "github.vscode-github-actions",
+    "vitest.explorer",
   ]
 }
