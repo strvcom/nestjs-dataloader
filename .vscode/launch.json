@@ -5,6 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "vitest: Run All",
+      "type": "node",
+      "request": "launch",
+      "autoAttachChildProcesses": true,
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/vitest/**"
+      ],
+      "program": "${workspaceRoot}/node_modules/.bin/vitest",
+      "args": [
+        "--run",
+      ],
+      "outputCapture": "std",
+      "preLaunchTask": "make: compile",
+      "presentation": {
+        "group": "vitest",
+      }
+    },
+    {
       "name": "vitest: Run Current File",
       "type": "node",
       "request": "launch",
