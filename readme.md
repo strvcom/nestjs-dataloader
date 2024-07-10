@@ -10,6 +10,140 @@
 
 ## Description
 
+This Nest.js module provides tight integration with Dataloader and makes creating and using Dataloaders feel like it's part of the core Nest.js ecoystem.
+
+## Installation
+
+```sh
+npm install @strv/nestjs-dataloader
+```
+
+- This package only provides ES Modules entrypoints. This means you can only import it from another ES Module, or you have to use Node.js v22's experimental feature that allows you to import it from a CommonJS module - [`--experimental-require-module`](https://nodejs.org/docs/latest/api/modules.html#loading-ecmascript-modules-using-require).
+- This package is written in TypeScript which means your IDE will be able to provide you with type information as you work with this package. 💪
+- Tested against Nest.js v10.
+
+## Usage
+
+The core principle of this package is that you work with Dataloaders by creating a Factory that creates those Dataloader instances. The Factory class is part of Nest's dependency injection which means it can use other components, like services, to deliver results.
+
+### Registering the module
+
+In your app module, register the Dataloader module:
+
+```ts
+// app.module.ts
+import { Module } from '@nestjs/common'
+import { DataloaderModule } from '@strv/nestjs-dataloader'
+
+@Module({
+  imports: [
+    DataloaderModule.forRoot(),
+  ],
+})
+class AppModule {}
+
+export {
+  AppModule,
+}
+```
+
+### Defining a factory
+
+A Factory is responsible for creating new instances of Dataloader. Each factory creates only one type of Dataloader so for each relation you will need to define a Factory. You define a Factory by subclassing the provided `DataloaderFactory` and implemneting `load()` and `id()` methods on it, at minimum.
+
+> ⚠️ Each `DataloaderFactory` implementation must be added to your module's `providers: []` and `exports: []` sections in order to make it available to other parts of your application.
+
+```ts
+// AuthorBooksLoader.factory.ts
+import { Injectable, type ExecutionContext } from '@nestjs/common'
+import { DataloaderFactory, type Aggregated, type LoaderFrom } from '@strv/nestjs-dataloader'
+import { BooksService } from './books.service.js'
+
+/** A fictional entity that we will try to resolve for a given author ID. */
+interface Book {
+  itemId: string
+  authorId: string
+  title: string
+}
+
+/** This is the ID type that the consumers of this Dataloader will use to request data */
+type AuthorId = number
+/**
+ * This is the type that will be returned from the Dataloader.
+ * `Aggregated` is a helper type that makes it easy to resolve one-to-many relations with a Dataloader.
+ */
+type AuthorBooksInfo = Aggregated<AuthorId, Book>
+/**
+ * This is the correctly typed Dataloader instance that this Factory will create.
+ * Use this type in your resolvers.
+ */
+type AuthorBooksLoader = LoaderFrom<AuthorBooksLoaderFactory>
+
+@Injectable()
+class AuthorBooksLoaderFactory extends DataloaderFactory<AuthorId, AuthorBooksInfo> {
+  readonly #books: BooksService
+
+  /** Since the Factory class is part of Nest's DI you can inject other components here. */
+  constructor(books: BooksService) {
+    super()
+    this.#books = books
+  }
+
+  /** Here you resolve the given IDs into the actual entities. */
+  async load(ids: AuthorId[], context: ExecutionContext) {
+    const results: Book[] = await this.#books.findBooksByAuthorIds(ids)
+    // Now that we have our books for the given authors, let's use a helper method on the Factory to aggregate
+    // the books by their author. This makes it very easy to work with one-to-many relations.
+    // This kind of aggregation is necessary because Dataloader only allows you to return one item per given ID.
+    // So we aggregate the books into objects where the `id` field is the requested author ID and the `values`
+    // array contains all the books found for that author.
+    //
+    // When resolving a one-to-one relation (ie. book -> author) you can simply return the results here instead of
+    // calling `.aggregateBy()`.
+    return this.aggregateBy(results, book => book.authorId)
+  }
+
+  /**
+   * This method is used to help the DataloaderFactory with correctly ordering the results. Dataloader expects
+   * to receive the results in exactly the same order as the IDs you were given. In order to do this, the Factory
+   * needs to know the ID value of each resolved entity. The Factory cannot do this without your help because
+   * the ID value might be stored in a field called `itemId`, `authorId`, etc. and it's not always going
+   * to be a nice `id` field.
+   */
+  id(entity: AuthorBooksInfo) {
+    return entity.id
+  }
+}
+
+export {
+  AuthorBooksLoaderFactory,
+  AuthorBooksLoader,
+}
+```
+
+### Injecting a Dataloader
+
+Now that we have a Dataloader factory defined and available in the DI container, it's time to put it to some use! To obtain a Dataloader instance, you can use the provided `@Loader()` param decorator in your GraphQL resolvers.
+
+```ts
+// author.resolver.ts
+import { Resolver, ResolveField } from '@nestjs/graphql'
+import { Loader } from '@strv/nestjs-dataloader'
+import { AuthorBooksLoaderFactory, type AuthorBooksLoader } from './AuthorBooksLoader.factory.js'
+import { Author } from './author.entity.js'
+
+@Resolver(Author)
+class AuthorResolver {
+  @ResolveField()
+  async books(@Parent() author: Author, @Loader(AuthorBooksLoaderFactory) books: AuthorBooksLoader) {
+    // result is of type `AuthorBooksInfo | null` that we defined in the Factory file.
+    const result = await books.load(author.id)
+    // Perform any post-processing or data conversion if needed.
+    return result?.values ?? []
+  }
+}
+```
+
 ## License
 
 See [LICENSE](LICENSE) for more information.
