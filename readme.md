@@ -5,7 +5,7 @@
 
   [![Continuous Integration][badge-ci]][workflow-ci]
 
-  > [Dataloader][dataloader-home] support for Nest.js like it was always meant to be.<br />Built with ❤️ at [STRV](https://www.strv.com)
+  > [Dataloader][dataloader-home] support for [Nest.js][nestjs-home] like it was always meant to be.<br />Built with ❤️ at [STRV](https://www.strv.com)
 </div>
 
 ## Description
@@ -21,6 +21,7 @@ npm install @strv/nestjs-dataloader
 - This package only provides ES Modules entrypoints. This means you can only import it from another ES Module, or you have to use Node.js v22's experimental feature that allows you to import it from a CommonJS module - [`--experimental-require-module`](https://nodejs.org/docs/latest/api/modules.html#loading-ecmascript-modules-using-require).
 - This package is written in TypeScript which means your IDE will be able to provide you with type information as you work with this package. 💪
 - Tested against Nest.js v10.
+- Requires Node.js v22.
 
 ## Usage
 
@@ -52,6 +53,8 @@ export {
 A Factory is responsible for creating new instances of Dataloader. Each factory creates only one type of Dataloader so for each relation you will need to define a Factory. You define a Factory by subclassing the provided `DataloaderFactory` and implemneting `load()` and `id()` methods on it, at minimum.
 
 > ⚠️ Each `DataloaderFactory` implementation must be added to your module's `providers: []` and `exports: []` sections in order to make it available to other parts of your application.
+
+> Each Factory can be considered global in the dependency graph, you do not need to import the module that provides the Factory in order to use it elsewhere in your application.
 
 ```ts
 // AuthorBooksLoader.factory.ts
@@ -150,4 +153,5 @@ See [LICENSE](LICENSE) for more information.
 
 [badge-ci]: https://github.com/strvcom/nestjs-dataloader/actions/workflows/ci.yaml/badge.svg
 [workflow-ci]: https://github.com/strvcom/nestjs-dataloader/actions/workflows/ci.yaml
+[nestjs-home]: https://nestjs.com
 [dataloader-home]: https://github.com/graphql/dataloader
