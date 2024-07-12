@@ -10,24 +10,24 @@
 
 ## Description
 
-This Nest.js module provides tight integration with Dataloader and makes creating and using Dataloaders feel like it's part of the core Nest.js ecoystem.
+This Nest.js module provides tight integration with Dataloader and makes creating and using Dataloaders feel like it's part of the core Nest.js ecosystem. Original inspiration for this project came from [krislefeber/nestjs-dataloader](https://github.com/krislefeber/nestjs-dataloader) - thank you for your work! 🍻 We decided to do a full rewrite to support latest Nest.js version and make some improvements to authoring the dataloader factories and to add some extra functionality on top.
 
 ## Installation
+
+- ⚠️ This package only provides ES Modules entrypoints. This means you can only import it from another ES Module, or you have to use Node.js v22's experimental feature that allows you to import it from a CommonJS module - [`--experimental-require-module`](https://nodejs.org/docs/latest/api/modules.html#loading-ecmascript-modules-using-require).
+- This package is written in TypeScript which means your IDE will be able to provide you with type information as you work with this package. 💪
+- Tested against Nest.js v10.
+- Requires Node.js v22.
 
 ```sh
 npm install @strv/nestjs-dataloader
 ```
 
-- This package only provides ES Modules entrypoints. This means you can only import it from another ES Module, or you have to use Node.js v22's experimental feature that allows you to import it from a CommonJS module - [`--experimental-require-module`](https://nodejs.org/docs/latest/api/modules.html#loading-ecmascript-modules-using-require).
-- This package is written in TypeScript which means your IDE will be able to provide you with type information as you work with this package. 💪
-- Tested against Nest.js v10.
-- Requires Node.js v22.
-
 ## Usage
 
-The core principle of this package is that you work with Dataloaders by creating a Factory that creates those Dataloader instances. The Factory class is part of Nest's dependency injection which means it can use other components, like services, to deliver results.
+The core principle is that you work with Dataloaders by creating a Factory that creates those Dataloader instances. The Factory class is part of Nest's dependency injection which means it can use other components, like services, to deliver results.
 
-### Registering the module
+### Register the module
 
 In your app module, register the Dataloader module:
 
@@ -48,7 +48,7 @@ export {
 }
 ```
 
-### Defining a factory
+### Define a factory
 
 A Factory is responsible for creating new instances of Dataloader. Each factory creates only one type of Dataloader so for each relation you will need to define a Factory. You define a Factory by subclassing the provided `DataloaderFactory` and implemneting `load()` and `id()` methods on it, at minimum.
 
@@ -124,7 +124,7 @@ export {
 }
 ```
 
-### Injecting a Dataloader
+### Inject a Dataloader
 
 Now that we have a Dataloader factory defined and available in the DI container, it's time to put it to some use! To obtain a Dataloader instance, you can use the provided `@Loader()` param decorator in your GraphQL resolvers.
 
