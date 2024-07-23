@@ -1,0 +1,12 @@
+/.cache
+/.vscode
+/.github
+/test
+/make
+/coverage
+/node_modules
+.editorconfig
+.gitignore
+eslint.config.mjs
+makefile
+vitest.config.mjs
