@@ -1,0 +1,43 @@
+name: release
+run-name: Release npm ${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - package.json
+  workflow_dispatch:
+    inputs:
+      channel:
+        type: choice
+        description: 'The npm dist-tag to publish to (default: `latest`)'
+        default: latest
+        options:
+          - latest
+          - next
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      id-token: write
+
+    name: npm release
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: make compile
+      - uses: JS-DevTools/npm-publish@v3.1.1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: ${{ inputs.channel }}
+          provenance: true
+
+      - run: git status
+      - run: git log --oneline
