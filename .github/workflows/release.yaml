@@ -1,5 +1,5 @@
 name: release
-run-name: Release npm ${{ github.ref_name }}
+run-name: Release npm package ${{ inputs.channel }}
 
 on:
   push:
