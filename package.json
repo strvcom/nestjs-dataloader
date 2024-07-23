@@ -5,7 +5,10 @@
     "name": "Robert Rossmann",
     "email": "robert.rossmann@strv.com"
   },
-  "repository": "github:strvcom/nestjs-dataloader",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/strvcom/nestjs-dataloader.git"
+  },
   "homepage": "https://github.com/strvcom/nestjs-dataloader",
   "version": "0.0.1",
   "license": "BSD-3-Clause",
