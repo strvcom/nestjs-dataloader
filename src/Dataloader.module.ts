@@ -1,43 +1,33 @@
-import { DynamicModule, type FactoryProvider, Module } from '@nestjs/common'
-import { APP_INTERCEPTOR } from '@nestjs/core'
-import { DataloaderInterceptor } from './Dataloader.interceptor.js'
-import { OPTIONS_TOKEN } from './internal.js'
-import { type DataloaderOptions } from './types.js'
+import { type DynamicModule, Module } from '@nestjs/common'
+import { type DataloaderModuleOptions, type Factory, type DataloaderOptions } from './types.js'
+import { DataloaderCoreModule } from './DataloaderCore.module.js'
 
-@Module({
-  providers: [
-    { provide: APP_INTERCEPTOR, useClass: DataloaderInterceptor },
-  ],
-})
+@Module({})
 class DataloaderModule {
   static forRoot(options?: DataloaderOptions): DynamicModule {
     return {
       module: DataloaderModule,
-      providers: [{
-        provide: OPTIONS_TOKEN,
-        useValue: options,
-      }],
+      imports: [DataloaderCoreModule.forRoot(options)],
     }
   }
 
   static forRootAsync(options: DataloaderModuleOptions): DynamicModule {
     return {
       module: DataloaderModule,
-      imports: options.imports ?? [],
-      providers: [{
-        provide: OPTIONS_TOKEN,
-        inject: options.inject ?? [],
-        useFactory: options.useFactory,
-      }],
+      imports: [DataloaderCoreModule.forRootAsync(options)],
+    }
+  }
+
+  static forFeature(loaders: Factory[]): DynamicModule {
+    return {
+      module: DataloaderModule,
+      providers: loaders,
+      exports: loaders,
     }
   }
 }
 
-/** Dataloader module options for async configuration */
-type DataloaderModuleOptions = Omit<FactoryProvider<DataloaderOptions>, 'provide'> & Pick<DynamicModule, 'imports'>
-
 
 export {
   DataloaderModule,
-  DataloaderModuleOptions,
 }

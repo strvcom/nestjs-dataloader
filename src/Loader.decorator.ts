@@ -1,6 +1,6 @@
 import { createParamDecorator, type ExecutionContext } from '@nestjs/common'
-import { lifetimeKey, store, type Factory } from './internal.js'
-import { type LifetimeKeyFn } from './types.js'
+import { lifetimeKey, store } from './internal.js'
+import { type Factory, type LifetimeKeyFn } from './types.js'
 import { DataloaderException } from './DataloaderException.js'
 
 /**

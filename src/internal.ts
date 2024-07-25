@@ -1,19 +1,12 @@
-import { type ExecutionContext, type Type } from '@nestjs/common'
+import { type ExecutionContext } from '@nestjs/common'
 import { type ModuleRef } from '@nestjs/core'
 import { GqlExecutionContext, type GqlContextType } from '@nestjs/graphql'
 import type DataLoader from 'dataloader'
-import { type DataloaderFactory } from './Dataloader.factory.js'
-import { type LifetimeKeyFn } from './types.js'
+import { type Factory, type LifetimeKeyFn } from './types.js'
 import { DataloaderException } from './DataloaderException.js'
 
 /** @private */
 const OPTIONS_TOKEN = Symbol('DataloaderModuleOptions')
-
-/**
- * DataloaderFactory constructor type
- * @private
- */
-type Factory = Type<DataloaderFactory<unknown, unknown>>
 
 /** @private */
 interface StoreItem {
@@ -48,6 +41,5 @@ const lifetimeKey: LifetimeKeyFn = (context: ExecutionContext) => {
 export {
   OPTIONS_TOKEN,
   store,
-  Factory,
   lifetimeKey,
 }

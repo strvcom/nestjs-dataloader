@@ -52,8 +52,6 @@ export {
 
 A Factory is responsible for creating new instances of Dataloader. Each factory creates only one type of Dataloader so for each relation you will need to define a Factory. You define a Factory by subclassing the provided `DataloaderFactory` and implemneting `load()` and `id()` methods on it, at minimum.
 
-> ⚠️ Each `DataloaderFactory` implementation must be added to your module's `providers: []` and `exports: []` sections in order to make it available to other parts of your application.
-
 > Each Factory can be considered global in the dependency graph, you do not need to import the module that provides the Factory in order to use it elsewhere in your application.
 
 ```ts
@@ -124,9 +122,32 @@ export {
 }
 ```
 
+### Export the factory
+
+Each Dataloader factory you create must be added to Nest.js DI container via `DataloaderModule.forFeature()`. Don't forget to also export the `DataloaderModule` to make the Dataloader factory available to other modules.
+
+```ts
+// authors.module.ts
+import { Module } from '@nestjs/common'
+import { DataloaderModule } from '@strv/nestjs-dataloader'
+import { BooksService } from './books.service.js'
+import { AuthorBooksLoaderFactory } from './AuthorBooksLoader.factory.js'
+
+@Module({
+  imports:[
+    DataloaderModule.forFeature([AuthorBooksLoaderFactory]),
+  ],
+  providers: [BooksService],
+  exports: [DataloaderModule],
+})
+class AuthorsModule {}
+```
+
 ### Inject a Dataloader
 
 Now that we have a Dataloader factory defined and available in the DI container, it's time to put it to some use! To obtain a Dataloader instance, you can use the provided `@Loader()` param decorator in your GraphQL resolvers.
+
+> 💡 It's possible to use the `@Loader()` param decorator also in REST controllers although the benefits of using Dataloaders in REST APIs are not that tangible as in GraphQL. However, if your app provides both GraphQL and REST interfaces this might be a good way to share some logic between the two.
 
 ```ts
 // author.resolver.ts
