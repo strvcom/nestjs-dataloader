@@ -10,13 +10,8 @@ describe('@Loader()', it => {
   it('injects the dataloader instance into the request handler', async t => {
     @Injectable()
     class SampleLoaderFactory extends DataloaderFactory<unknown, unknown> {
-      async load(keys: unknown[]) {
-        return await Promise.resolve(keys)
-      }
-
-      id(key: unknown) {
-        return key
-      }
+      load = async (keys: unknown[]) => await Promise.resolve(keys)
+      id = (key: unknown) => key
     }
 
     @Controller()
@@ -28,10 +23,12 @@ describe('@Loader()', it => {
     }
 
     const module = await Test.createTestingModule({
-      imports: [DataloaderModule.forRoot()],
+      imports: [
+        DataloaderModule.forRoot(),
+        DataloaderModule.forFeature([SampleLoaderFactory]),
+      ],
       controllers: [TestController],
-      providers: [SampleLoaderFactory],
-      exports: [SampleLoaderFactory],
+      exports: [DataloaderModule],
     }).compile()
     const app = await module.createNestApplication<NestExpressApplication>().init()
     t.onTestFinished(async () => await app.close())
