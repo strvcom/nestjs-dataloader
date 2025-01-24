@@ -13,7 +13,7 @@ const globs = {
   dts: '**/*.d.ts',
 }
 
-/** @type {Array<import("eslint").Linter.FlatConfig>} */
+/** @type {Array<import("eslint").Linter.Config>} */
 const config = [
   { linterOptions: {
     reportUnusedDisableDirectives: true,
@@ -31,12 +31,6 @@ const config = [
   { files: [globs.ts], ...ts },
   { files: [globs.ts], ...tsopt },
   { files: [globs.ts], ...tsstyle },
-
-  { files: [globs.ts],
-    languageOptions: {
-      parserOptions: { project: './tsconfig.json' },
-    },
-    rules: {} },
 
   { files: [globs.mjs, globs.ts],
     rules: {

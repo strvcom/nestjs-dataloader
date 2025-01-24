@@ -34,6 +34,8 @@ const lifetimeKey: LifetimeKeyFn = (context: ExecutionContext) => {
     case 'graphql': return GqlExecutionContext.create(context).getContext<{ req: object }>().req
     case 'http': return context.switchToHttp().getRequest<object>()
     // Support for other context types can be added later, we just did not need them yet.
+    case 'ws':
+    case 'rpc':
     default: throw new DataloaderException(`Unknown or unsupported context type: ${type}`)
   }
 }
