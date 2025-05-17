@@ -16,6 +16,8 @@
       "program": "${workspaceRoot}/node_modules/.bin/vitest",
       "args": [
         "--run",
+        "--testTimeout", "0",
+        "--hookTimeout", "0",
       ],
       "outputCapture": "std",
       "preLaunchTask": "make: compile",
@@ -34,6 +36,8 @@
       ],
       "program": "${workspaceRoot}/node_modules/.bin/vitest",
       "args": [
+        "--testTimeout", "0",
+        "--hookTimeout", "0",
         "run",
         "${relativeFile}"
       ],
