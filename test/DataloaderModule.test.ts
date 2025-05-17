@@ -28,7 +28,7 @@ describe('DataloaderModule', it => {
     t.expect(app).toBeInstanceOf(TestingModule)
   })
 
-  it('.forFeatre()', async t => {
+  it('.forFeature()', async t => {
     @Injectable()
     class SampleLoaderFactory extends DataloaderFactory<unknown, unknown> {
       load = async (keys: unknown[]) => await Promise.resolve(keys)
