@@ -7,7 +7,7 @@ export default vitest.defineConfig({
     },
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'html', 'json'],
+      reporter: ['html', 'json'],
       enabled: true,
     },
     fileParallelism: false,
