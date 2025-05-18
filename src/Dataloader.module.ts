@@ -1,5 +1,5 @@
 import { type DynamicModule, Module } from '@nestjs/common'
-import { type DataloaderModuleOptions, type Factory, type DataloaderOptions } from './types.js'
+import { type DataloaderModuleOptions, type DataloaderOptions } from './types.js'
 import { DataloaderCoreModule } from './DataloaderCore.module.js'
 
 @Module({})
@@ -15,14 +15,6 @@ class DataloaderModule {
     return {
       module: DataloaderModule,
       imports: [DataloaderCoreModule.forRootAsync(options)],
-    }
-  }
-
-  static forFeature(loaders: Factory[]): DynamicModule {
-    return {
-      module: DataloaderModule,
-      providers: loaders,
-      exports: loaders,
     }
   }
 }
