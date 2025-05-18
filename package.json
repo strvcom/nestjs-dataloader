@@ -17,7 +17,7 @@
     ".": "./src/index.js"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.13"
   },
   "scripts": {
     "prepare": "touch node_modules && make"

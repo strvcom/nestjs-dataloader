@@ -14,10 +14,11 @@ This Nest.js module provides tight integration with Dataloader and makes creatin
 
 ## Installation
 
-- ⚠️ This package only provides ES Modules entrypoints. This means you can only import it from another ES Module, or you have to use Node.js v22's experimental feature that allows you to import it from a CommonJS module - [`--experimental-require-module`](https://nodejs.org/docs/latest/api/modules.html#loading-ecmascript-modules-using-require).
+- ⚠️ This package only provides ES Modules entrypoints. This means you can only import it from another ES Module, or you have to use Node.js v22.13 which brings support for loading ES modules from CommonJS using `require(esm)`.
+- If your program uses TypeScript and you compile your codebase to CommonJS module syntax you will need to use at least TypeScript v5.8 which implements support for such setup: [TypeScript docs](https://devblogs.microsoft.com/typescript/announcing-typescript-5-8/#support-for-require()-of-ecmascript-modules-in---module-nodenext).
 - This package is written in TypeScript which means your IDE will be able to provide you with type information as you work with this package. 💪
-- Tested against Nest.js v10.
-- Requires Node.js v22.
+- Tested against Nest.js v10 and v11.
+- Requires Node.js v22.13.
 
 ```sh
 npm install @strv/nestjs-dataloader
