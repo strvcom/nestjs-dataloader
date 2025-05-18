@@ -25,11 +25,11 @@ npm install @strv/nestjs-dataloader
 
 ## Usage
 
-The core principle is that you work with Dataloaders by creating a Factory that creates those Dataloader instances. The Factory class is part of Nest's dependency injection which means it can use other components, like services, to deliver results.
+The core principle is that you work with Dataloaders by defining a Factory class that is responsible for creating those Dataloader instances. The Factory class is part of Nest's dependency injection which means it can use other injectable providers to produce results.
 
 ### Register the module
 
-In your app module, register the Dataloader module:
+In your app, or root module, register the Dataloader module. You only need to do this once in your Nest.js application.
 
 ```ts
 // app.module.ts
@@ -38,6 +38,7 @@ import { DataloaderModule } from '@strv/nestjs-dataloader'
 
 @Module({
   imports: [
+    // There is also `.forRootAsync()` to use a factory to provide options for the module.
     DataloaderModule.forRoot(),
   ],
 })
@@ -52,7 +53,7 @@ export {
 
 A Factory is responsible for creating new instances of Dataloader. Each factory creates only one type of Dataloader so for each relation you will need to define a Factory. You define a Factory by subclassing the provided `DataloaderFactory` and implemneting `load()` and `id()` methods on it, at minimum.
 
-> Each Factory can be considered global in the dependency graph, you do not need to import the module that provides the Factory in order to use it elsewhere in your application.
+> Each Factory can be considered global in the Nest.js dependency graph, you do not need to import the module that provides the Factory in order to use it elsewhere in your application. You do need, however, to export the Factory from the hosting Nest.js module in order to use it in a different module.
 
 ```ts
 // AuthorBooksLoader.factory.ts
@@ -122,9 +123,9 @@ export {
 }
 ```
 
-### Export the factory
+### Register the factory
 
-Each Dataloader factory you create must be added to Nest.js DI container via `DataloaderModule.forFeature()`. Don't forget to also export the `DataloaderModule` to make the Dataloader factory available to other modules.
+Each Dataloader factory you create must be added to your Nest.js module as a provider. Optionally, if you need to use this factory also in other modules you must export the factory from the module as well.
 
 ```ts
 // authors.module.ts
@@ -134,20 +135,25 @@ import { BooksService } from './books.service.js'
 import { AuthorBooksLoaderFactory } from './AuthorBooksLoader.factory.js'
 
 @Module({
-  imports:[
-    DataloaderModule.forFeature([AuthorBooksLoaderFactory]),
+  providers: [
+    BooksService,
+    AuthorBooksLoaderFactory
   ],
-  providers: [BooksService],
-  exports: [DataloaderModule],
+  // If you need to use this dataloader in a different Nest.js module, export it
+  exports: [
+    AuthorBooksLoaderFactory,
+  ],
 })
 class AuthorsModule {}
 ```
 
 ### Inject a Dataloader
 
-Now that we have a Dataloader factory defined and available in the DI container, it's time to put it to some use! To obtain a Dataloader instance, you can use the provided `@Loader()` param decorator in your GraphQL resolvers.
+Now that we have a Dataloader factory defined and available in the DI container, it's time to put it to some use! To obtain a Dataloader instance in a resolver, you can use the provided `@Loader()` parameter decorator in your GraphQL resolvers.
 
-> 💡 It's possible to use the `@Loader()` param decorator also in REST controllers although the benefits of using Dataloaders in REST APIs are not that tangible as in GraphQL. However, if your app provides both GraphQL and REST interfaces this might be a good way to share some logic between the two.
+> 💡 It's possible to use the `@Loader()` parameter decorator also in REST controllers although the benefits of using Dataloaders in REST APIs are not that tangible as in GraphQL. However, if your app provides both GraphQL and REST interfaces this might be a good way to share some logic between the two.
+
+A new Dataloader instance will be produced for each incoming request and Dataloader by default caches the results it returns for the duration of that request. This is important to remember when troubleshooting data inconsistencies in responses after an update has been made to a previously-fetched record.
 
 ```ts
 // author.resolver.ts
