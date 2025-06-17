@@ -9,9 +9,9 @@ import { DataloaderModule, DataloaderFactory, type LoaderFrom, Loader } from '@s
 describe('@Loader()', it => {
   it('injects the dataloader instance into the request handler', async t => {
     @Injectable()
-    class SampleLoaderFactory extends DataloaderFactory<unknown, unknown> {
-      load = async (keys: unknown[]) => await Promise.resolve(keys)
-      id = (key: unknown) => key
+    class SampleLoaderFactory extends DataloaderFactory<string, unknown> {
+      load = async (keys: string[]) => await Promise.resolve(keys)
+      id = (key: string) => key
     }
 
     @Controller()
