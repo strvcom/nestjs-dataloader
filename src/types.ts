@@ -2,7 +2,8 @@ import { type Type, type ExecutionContext, type FactoryProvider, type DynamicMod
 import { type DataloaderFactory } from './Dataloader.factory.js'
 
 /** DataloaderFactory constructor type */
-type Factory = Type<DataloaderFactory<unknown, unknown>>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Factory = Type<DataloaderFactory<any, any>>
 
 /**
  * Given an execution context, extract a value out of it that is
