@@ -1,12 +1,15 @@
 import { describe } from 'vitest'
 import { type ExecutionContext } from '@nestjs/common'
 import DataLoader from 'dataloader'
-import { DataloaderFactory, type Aggregated } from '@strv/nestjs-dataloader'
+import { type LoaderFrom, DataloaderFactory, type Aggregated } from '@strv/nestjs-dataloader'
 
 class TestFactory extends DataloaderFactory<unknown, unknown> {
   load = async () => await Promise.resolve([])
   id = (key: unknown) => key
 }
+// This is a test to make sure the `LoaderFrom` extractor type works correctly and the code can be compiled.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type TestLoader = LoaderFrom<TestFactory>
 
 describe('DataloaderFactory', it => {
   it('is a class', t => {
