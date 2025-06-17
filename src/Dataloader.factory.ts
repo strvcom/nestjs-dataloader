@@ -86,8 +86,10 @@ abstract class DataloaderFactory<ID, Value, NotFoundValue = null, CacheID = ID> 
   abstract id(entity: Value): ID
 }
 
+// I would happily remove the `any` type but I could not figure out how to do it without it. 🥺
 /** Type extractor to get to the underlying Dataloader type that the factory creates */
-type LoaderFrom<TFactory extends DataloaderFactory<unknown, unknown>> = ReturnType<TFactory['create']>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type LoaderFrom<TFactory extends DataloaderFactory<any, any>> = ReturnType<TFactory['create']>
 
 /**
  * Aggregated represents a result that aggregates values based on a specific ID property of values. Very useful to work
