@@ -2,7 +2,7 @@ import request from 'supertest'
 import Dataloader from 'dataloader'
 import { describe } from 'vitest'
 import { Controller, Get, Injectable } from '@nestjs/common'
-import { NestExpressApplication } from '@nestjs/platform-express'
+import { type NestExpressApplication } from '@nestjs/platform-express'
 import { Test } from '@nestjs/testing'
 import { DataloaderModule, DataloaderFactory, type LoaderFrom, Loader } from '@strv/nestjs-dataloader'
 

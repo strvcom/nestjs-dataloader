@@ -103,6 +103,6 @@ interface Aggregated<ID, Value> {
 
 export {
   DataloaderFactory,
-  LoaderFrom,
-  Aggregated,
+  type LoaderFrom,
+  type Aggregated,
 }

@@ -30,7 +30,7 @@ interface DataloaderOptions {
 /** Dataloader module options for async configuration */
 type DataloaderModuleOptions = Omit<FactoryProvider<DataloaderOptions>, 'provide'> & Pick<DynamicModule, 'imports'>
 
-export {
+export type {
   Factory,
   LifetimeKeyFn,
   DataloaderOptions,
