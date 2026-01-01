@@ -15,8 +15,10 @@ abstract class DataloaderFactory<ID, Value, NotFoundValue = null, CacheID = ID> 
    * @private You should not call this method directly; instead, it should be called by the interceptor
    */
   create(context: ExecutionContext) {
-    return new DataLoader<ID, Value | NotFoundValue, CacheID>(async ids =>
-      await this.#load(ids, context), this.options?.(context))
+    return new DataLoader<ID, Value | NotFoundValue, CacheID>(
+      async ids => await this.#load(ids, context),
+      this.options?.(context),
+    )
   }
 
   /**

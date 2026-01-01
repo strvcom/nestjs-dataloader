@@ -1,4 +1,5 @@
-import { createParamDecorator, type ExecutionContext } from '@nestjs/common'
+import { createParamDecorator, Scope, type ExecutionContext } from '@nestjs/common'
+import { ContextIdFactory } from '@nestjs/core'
 import { lifetimeKey, store } from './internal.js'
 import { type Factory, type LifetimeKeyFn } from './types.js'
 import { DataloaderException } from './DataloaderException.js'
@@ -9,7 +10,7 @@ import { DataloaderException } from './DataloaderException.js'
  * drivers etc.)
  */
 function createLoaderDecorator(lifetime: LifetimeKeyFn) {
-  return createParamDecorator((Factory: Factory, context: ExecutionContext) => {
+  return createParamDecorator(async (Factory: Factory, context: ExecutionContext) => {
     const item = store.get(lifetime(context))
 
     if (!item) {
@@ -17,8 +18,18 @@ function createLoaderDecorator(lifetime: LifetimeKeyFn) {
     }
 
     if (!item.dataloaders.has(Factory)) {
-    // We don't have this dataloader created yet for this request, let's instantiate it and save it
-      const factory = item.moduleRef.get(Factory, { strict: false })
+      const { scope } = item.moduleRef.introspect(Factory)
+
+      const factory = await (async () => {
+        switch (scope) {
+          case Scope.DEFAULT: return item.moduleRef.get(Factory, { strict: false })
+          case Scope.TRANSIENT:
+          case Scope.REQUEST:
+          default: return await item.moduleRef
+            .resolve(Factory, ContextIdFactory.getByRequest(lifetime(context)), { strict: false })
+        }
+      })()
+
       item.dataloaders.set(Factory, factory.create(context))
     }
 
