@@ -31,19 +31,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
+          registry-url: https://registry.npmjs.org/
           cache: npm
       - run: make compile
-      - uses: JS-DevTools/npm-publish@v3.1.1
-        id: publish
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          tag: ${{ inputs.channel }}
-          provenance: true
-
-      - run: |
-          git tag -a ${{ steps.publish.outputs.version }}@${{ inputs.channel }}
-          git push --tags
-        if: ${{ steps.publish.outputs.type }}
-
-      - run: git status
-      - run: git log --oneline
+      - run: npm publish --tag ${{ inputs.channel }} --provenance
