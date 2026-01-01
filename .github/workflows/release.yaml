@@ -31,6 +31,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
+          registry-url: https://registry.npmjs.org/
           cache: npm
       - run: make compile
       - run: npm publish --tag ${{ inputs.channel }} --provenance
