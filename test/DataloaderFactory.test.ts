@@ -34,14 +34,14 @@ describe('.create()', it => {
 
   it('connects the Dataloader.load() function to the Factory.load() function', async t => {
     const mapping: Record<string, string> = {
-      a: 'A',
-      b: 'B',
-      c: 'C',
+      item1: 'A',
+      item2: 'B',
+      item3: 'C',
     }
 
     class Factory extends DataloaderFactory<string, { id: string, value: string | null }> {
       async load(ids: string[]) {
-        t.expect(ids).toEqual(['a', 'b', 'c', 'd'])
+        t.expect(ids).toEqual(['item1', 'item2', 'item3', 'item4'])
 
         return await Promise.resolve(ids.map(id => ({ id, value: mapping[id] ?? null })))
       }
@@ -53,18 +53,18 @@ describe('.create()', it => {
 
     const loader = new Factory().create({} as ExecutionContext)
     const tasks = [
-      loader.load('a'),
-      loader.load('b'),
-      loader.load('c'),
-      loader.load('d'),
+      loader.load('item1'),
+      loader.load('item2'),
+      loader.load('item3'),
+      loader.load('item4'),
     ]
     const results = await Promise.all(tasks)
 
     t.expect(results).toEqual([
-      { id: 'a', value: 'A' },
-      { id: 'b', value: 'B' },
-      { id: 'c', value: 'C' },
-      { id: 'd', value: null },
+      { id: 'item1', value: 'A' },
+      { id: 'item2', value: 'B' },
+      { id: 'item3', value: 'C' },
+      { id: 'item4', value: null },
     ])
   })
 })
