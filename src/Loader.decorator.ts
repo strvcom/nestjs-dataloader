@@ -17,23 +17,30 @@ function createLoaderDecorator(lifetime: LifetimeKeyFn) {
       throw new DataloaderException('DataloaderModule not available in this Nest.js application')
     }
 
+    // GraphQL resolves sibling list fields concurrently, so a single request can invoke this decorator for the same
+    // Factory many times before any of them finishes constructing the loader. Memoise the creation *promise*
+    // synchronously - before the first `await` - so every concurrent resolution awaits and shares one loader instance.
+    // Storing the resolved loader after an `await` instead would let each invocation pass the `has()` check and mint
+    // its own loader, defeating per-request batching and caching.
     if (!item.dataloaders.has(Factory)) {
-      const { scope } = item.moduleRef.introspect(Factory)
+      item.dataloaders.set(Factory, (async () => {
+        const { scope } = item.moduleRef.introspect(Factory)
 
-      const factory = await (async () => {
-        switch (scope) {
-          case Scope.DEFAULT: return item.moduleRef.get(Factory, { strict: false })
-          case Scope.TRANSIENT:
-          case Scope.REQUEST:
-          default: return await item.moduleRef
-            .resolve(Factory, ContextIdFactory.getByRequest(lifetime(context)), { strict: false })
-        }
-      })()
+        const factory = await (async () => {
+          switch (scope) {
+            case Scope.DEFAULT: return item.moduleRef.get(Factory, { strict: false })
+            case Scope.TRANSIENT:
+            case Scope.REQUEST:
+            default: return await item.moduleRef
+              .resolve(Factory, ContextIdFactory.getByRequest(lifetime(context)), { strict: false })
+          }
+        })()
 
-      item.dataloaders.set(Factory, factory.create(context))
+        return factory.create(context)
+      })())
     }
 
-    return item.dataloaders.get(Factory)
+    return await item.dataloaders.get(Factory)
   })
 }
 
