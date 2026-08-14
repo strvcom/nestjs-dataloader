@@ -131,4 +131,48 @@ describe('@Loader()', it => {
     t.expect(response.status).toBe(200)
     t.expect(response.body).toEqual({ text: 'Hello world' })
   })
+  it('reuses a single dataloader across concurrent resolutions within one request', async t => {
+    let created = 0
+    const seen: Array<LoaderFrom<SampleLoaderFactory>> = []
+
+    @Injectable()
+    class SampleLoaderFactory extends DataloaderFactory<string, string> {
+      load = async (keys: string[]) => await Promise.resolve(keys)
+      id = (key: string) => key
+      override create(context: Parameters<DataloaderFactory<string, string>['create']>[0]) {
+        created += 1
+        return super.create(context)
+      }
+    }
+
+    @Controller()
+    class TestController {
+      @Get('/')
+      handle(
+        @Loader(SampleLoaderFactory) first: LoaderFrom<SampleLoaderFactory>,
+        @Loader(SampleLoaderFactory) second: LoaderFrom<SampleLoaderFactory>,
+      ) {
+        seen.push(first, second)
+      }
+    }
+
+    const module = await Test.createTestingModule({
+      imports: [
+        DataloaderModule.forRoot(),
+      ],
+      providers: [
+        SampleLoaderFactory,
+      ],
+      controllers: [TestController],
+    }).compile()
+    const app = await module.createNestApplication<NestExpressApplication>().init()
+    t.onTestFinished(async () => await app.close())
+
+    await request(app.getHttpServer()).get('/')
+
+    // The @Loader() params resolve concurrently; both must receive the same
+    // per-request instance, constructed exactly once.
+    t.expect(created).toBe(1)
+    t.expect(seen[0]).toBe(seen[1])
+  })
 })

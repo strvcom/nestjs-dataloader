@@ -12,8 +12,11 @@ const OPTIONS_TOKEN = Symbol('DataloaderModuleOptions')
 interface StoreItem {
   /** ModuleRef is used by the `@Loader()` decorator to pull the Factory instance from Nest's DI container */
   moduleRef: ModuleRef
-  /** Dataloaders already constructed by a given Factory for this request. */
-  dataloaders: Map<Factory, DataLoader<unknown, unknown>>
+  /**
+   * Dataloaders being constructed by a given Factory for this request. The value is the loader's *creation
+   * promise* so that concurrent `@Loader()` resolutions memoise and share a single instance (see Loader.decorator).
+   */
+  dataloaders: Map<Factory, Promise<DataLoader<unknown, unknown>>>
 }
 
 /**
