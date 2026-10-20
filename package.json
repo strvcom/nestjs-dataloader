@@ -50,13 +50,13 @@
     "@strv/eslint-config-node": "^5.0.0",
     "@strv/eslint-config-typescript": "^6.0.0",
     "@types/express": "^5.0.2",
-    "@types/node": "^25.0.3",
-    "@types/supertest": "^6.0.2",
-    "@vitest/coverage-v8": "^4.0.16",
-    "eslint": "^9.19.0",
+    "@types/node": "^26",
+    "@types/supertest": "^7",
+    "@vitest/coverage-v8": "^5.0.5",
+    "eslint": "^10.13.0",
     "supertest": "^7.0.0",
-    "typescript": "^5.8.3",
-    "unplugin-swc": "^1.5.3",
-    "vitest": "^4.0.18"
+    "typescript": "^6",
+    "unplugin-swc": "^2",
+    "vitest": "^5.0.5"
   }
 }
